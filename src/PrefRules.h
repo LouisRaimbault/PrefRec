@@ -54,12 +54,6 @@ void getabfull (std::vector<std::string>& tabstr, double * RelativeSupvalue, int
 
 double conftwo (double & freq_ante, double & freq_complem, double & freq_set );
 
-double powertwo (double & freq_ante, double & freq_complem, double & freq_set );
-
-double confone (double & freq_ante, double & freq_complem, double & freq_set );
-
-double powerone (double & freq_ante, double & freq_complem, double & freq_set );
-
 double cov (double & freq_ante, double & freq_complem, double & freq_set );
 
 double corr (double & freq_ante, double & freq_complem, double & freq_set);

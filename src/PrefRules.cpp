@@ -84,20 +84,6 @@ double conftwo (double & freq_ante, double & freq_complem, double & freq_set )
   
 }
 
-double powertwo (double & freq_ante, double & freq_complem, double & freq_set )
-{
-  return (1-freq_ante - freq_complem + freq_set)/(1-freq_ante);
-}
-
-double confone (double & freq_ante, double & freq_complem, double & freq_set )
-{
-  return (1-freq_ante - freq_complem + freq_set)/(1-freq_complem);
-}
-
-double powerone (double & freq_ante, double & freq_complem, double & freq_set )
-{
-  return freq_set/freq_complem;
-}
 
 double cov (double & freq_ante, double & freq_complem, double & freq_set )
 {
@@ -356,13 +342,10 @@ int main (int argc , char ** argv)
 
   std::unordered_map<std::string,int> mapparam;
   mapparam["conftwo"] = 0;
-  mapparam["powertwo"] = 1;
-  mapparam["confone"] = 2;
-  mapparam["powerone"] = 3;
-  mapparam["cov"] = 4;
-  mapparam["corr"] = 5;
-  mapparam["kappa"] = 6;
-  mapparam["mp"] = 7;
+  mapparam["cov"] = 1;
+  mapparam["corr"] = 2;
+  mapparam["kappa"] = 3;
+  mapparam["mp"] = 4;
 
   std::cout << "Build PrefRecTRee_Rules ... "; 
 
@@ -439,24 +422,15 @@ int main (int argc , char ** argv)
         dico.mafonc = &conftwo; 
         break;
         case 1:
-        dico.mafonc = &powertwo;
-        break;
-        case 2:
-        dico.mafonc = &confone;
-        break;
-        case 3:
-        dico.mafonc = &powerone;
-        break;
-        case 4:
         dico.mafonc = &cov;
         break;
-        case 5:
+        case 2:
         dico.mafonc = &corr;
         break;
-        case 6:
+        case 3:
         dico.mafonc = &kappa;
         break;
-        case 7:
+        case 4:
         dico.mafonc = &MaxwellP;
         break;
       }
