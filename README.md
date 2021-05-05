@@ -1,4 +1,4 @@
-# PrefRec_debog
+# PrefRec
 
 ## Description 
 
@@ -21,6 +21,11 @@ If you would like to better understand their use and methods of operation, pleas
 * 7 differents possibles kind of supplementary coefficient
 * Get an output txt files for informations about confident rules and the coefficients you choose 
 
+**Prefrules supplementary coefficient :** 
+* Covariance
+* Correlation
+* Kappa
+* Maxwell-Pilliner 
 
 ## Creating binaries and getting started
 ```
@@ -61,7 +66,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 ## Parameters for Prefrec :
-|param|is-required|note|
+|param|required|note|
 |--------------------|--------|--------|
 |    transaction dataset    |    yes    | The Dataset transaction  |  
 |    item delimitator "d="   |    yes    | the item separator you use with your dataset transaction | 
@@ -72,7 +77,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 ## Parameters for Prefrules :
-|param|is-required|note|
+|param|required|note|
 |--------------------|--------|--------|
 |    file set coefficient   |    yes    | The genrules_file.txt created with Prefrec   |
 |    file set coefficient item |    yes    |  The genrules_file_item.txt created with Prefrec  | 
@@ -103,9 +108,12 @@ The confidence of a rule A ⇒ B is defined as conf(A ⇒ B) = supp(A ⇒B)/supp
 Considering a treshold minconf, a rule such that A ⇒ B is confident if conf (A ⇒ B) > minconf.
 
 **Others criterion**
-We propose some other  criterion, considering freq(A) the frequence of an itemSet A and A ⇒ B a rule with A ⊂ C and B = C \ A. These criteria can be calculated after pruning related to minconf.
 
-![](coeff.png)
+We propose some other criterion:
+- Covariance 
+- Correlation
+- Kappa coefficient 
+- Maxwell-Pilliner coefficient
 
 
 
