@@ -1,0 +1,6 @@
+Here is the document to see update of PrefRec :
+
+05/05/2021 : First version available on github with functions :
+
+Prefrec : Mining frequent itemSet
+Prefrules: Extracting confident rules from a prefrec output
