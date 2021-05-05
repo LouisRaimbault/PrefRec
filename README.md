@@ -11,6 +11,15 @@ Please, Let us know if you want to get a specialized version for your use case, 
 More versions will arrive soon for more precise and diverse applications.
 If you would like to better understand their use and methods of operation, please have a look to : (link comming soon)
 
+**Prefrec:**
+* (recursiv) Mining frequent itemSets with a relative Support
+* Get an output Tsv file for information about frequent itemSet
+* Get 2 files necessary to launch Prefrules 
+
+**Prefrules:**
+* (recursiv) Mining confident rules with a minConf value
+* 7 differents possibles kind of supplementary coefficient
+* Get an output txt files for informations about confident rules and the coefficients you choose 
 
 
 ## Creating binaries and getting started
@@ -52,7 +61,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 ## Parameters for Prefrec :
-|param|is-mandatory|note|
+|param|is-required|note|
 |--------------------|--------|--------|
 |    transaction dataset    |    yes    | The Dataset transaction  |  
 |    item delimitator "d="   |    yes    | the item separator you use with your dataset transaction | 
@@ -63,7 +72,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 ## Parameters for Prefrules :
-|param|is-mandatory|note|
+|param|is-required|note|
 |--------------------|--------|--------|
 |    file set coefficient   |    yes    | The genrules_file.txt created with Prefrec   |
 |    file set coefficient item |    yes    |  The genrules_file_item.txt created with Prefrec  | 
@@ -76,7 +85,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 
-**Definitions of frequent itemSets :**
+##Definitions of frequent itemSets :
 
 Let us remind you the 2 mains definitions of this data analys method
 
@@ -101,12 +110,3 @@ We propose some other  criterion, considering freq(A) the frequence of an itemSe
 
 
 
-**Prefrec:**
-* (recursiv) Mining frequent itemSets with a relative Support
-* Get an output Tsv file for information about frequent itemSet
-* Get 2 files necessary to launch Prefrules 
-
-**Prefrules:**
-* (recursiv) Mining confident rules with a minConf value
-* 7 differents possibles kind of supplementary coefficient
-* Get an output txt files for informations about confident rules and the coefficients you choose 
