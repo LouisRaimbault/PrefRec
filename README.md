@@ -85,7 +85,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 
 
-##Definitions of frequent itemSets :
+## Definitions of frequent itemSets :
 
 Let us remind you the 2 mains definitions of this data analys method
 
