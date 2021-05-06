@@ -18,7 +18,7 @@ If you would like to better understand their use and methods of operation, pleas
 
 **Prefrules:**
 * (recursiv) Mining confident rules with a minConf value
-* 7 differents possibles kind of supplementary coefficient
+* 4 differents possibles kind of supplementary coefficient
 * Get an output txt files for informations about confident rules and the coefficients you choose 
 
 **Prefrules supplementary coefficient :** 
