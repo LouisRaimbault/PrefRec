@@ -29,7 +29,7 @@ If you would like to better understand their use and methods of operation, pleas
 
 ## Creating binaries and getting started
 ```
-cd Format_makevar && make
+cd src && make
 ./Prefrec <transaction dataset> < d=item_delimitator> <s=minimal_relative_support "s"> <output_file_set_infos> <output file for coefficient>
 ./Prefrules <file set coefficient> <file set coefficient rules> <c=minconf> <n=nbcoeff> <coeff 1 > ... <coeff n>  <output file coefficient info>
 
