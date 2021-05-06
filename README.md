@@ -54,7 +54,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 The folder sample contain a simple small dataset test. You can use it for the example below to see how the software works.
 
-The section 
+The section https://github.com/LouisRaimbault/PrefRec/tree/main/databases_test presents some larger databases used for efficiency simulations. If you want more information, you can read the associated read me.
 
 
 ### Example
