@@ -9,7 +9,7 @@ These 2 algorithms were built around the notion of *Mining Frequent ItemSets and
 Please, Let us know if you want to get a specialized version for your use case, and quote my work if you want to reuse this code for your personal needs.
 
 More versions will arrive soon for more precise and diverse applications.
-If you would like to better understand their use and methods of operation, please have a look to : (link comming soon)
+If you would like to better understand their use and methods of operation, please have a look to : (link comming soon) (1)
 
 **Prefrec:**
 * (recursiv) Mining frequent itemSets with a relative Support
@@ -51,6 +51,10 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 |a,b,d|
 |c|
 
+
+The folder sample contain a simple small dataset test. You can use it for the example below to see how the software works.
+
+The section 
 
 
 ### Example
