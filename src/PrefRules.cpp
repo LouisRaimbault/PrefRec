@@ -115,26 +115,27 @@ pnodesr * cfath = NULL;
 
 void gen_tree (pnodesr * curlist, pnodesr * curtree, pnodesr * curfather,pnodesr ** listepnodesr, int  & sit, int & stop)
 { if (sit != stop)
- {
+{
   if (curlist->size > curtree->size)
-    { curlist->father = curtree; 
-      curtree->son = curlist;
-      sit++;
-      gen_tree (listepnodesr[sit],curlist,curtree,listepnodesr,sit,stop);
-    }
+  { curlist->father = curtree; 
+    curtree->son = curlist;
+    sit++;
+    gen_tree (listepnodesr[sit],curlist,curtree,listepnodesr,sit,stop);
+  }
   if (curlist->size == curtree->size)
-    {   curlist->father = curfather;
-        curtree->brother = curlist;
-        sit++;
-        gen_tree (listepnodesr[sit],curlist,curfather,listepnodesr,sit,stop);
-
-    }
+  {   curlist->father = curfather;
+    curtree->brother = curlist;
+    sit++;
+    gen_tree (listepnodesr[sit],curlist,curfather,listepnodesr,sit,stop);
+    
+  }
   
   if (curlist->size < curtree->size)
-    {
-      gen_tree (curlist, curtree->father,curtree->father->father,listepnodesr,sit,stop);
-    }
- }   
+  {
+    gen_tree (curlist, curtree->father,curtree->father->father,listepnodesr,sit,stop);
+  }
+}
+else {clist = curlist; ctree = curtree; cfath = curfather;}   
 
 }
 
@@ -254,7 +255,7 @@ void genrules (pnodesr & tree ,int size ,std::string ** tabname,std::string & st
       consalpha [nrg] = *tabname[j];
       consequent[nrg++] = *tabname[j];
     } 
-  tmpstr.erase(tmpstr.begin()+st,tmpstr.end());       
+    tmpstr.erase(tmpstr.begin()+st,tmpstr.end());       
   }
   
   if (nrg >1 && size > 2) 
