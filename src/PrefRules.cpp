@@ -1,81 +1,108 @@
 #include "PrefRules.h"
 
 
-dimentions::dimentions(int nb_elem_, int nb_lignes_):nb_elem (nb_elem_) , nb_lignes (nb_lignes_) {};
+
 rules::rules (double conf_, std::string  ante_, std::string comp_, std::string set_ ) : conf(conf_), ante(ante_), comp(comp_), set(set_) {};
 pnodesr::pnodesr (double sup_, int litem_, int size_ ) : sup(sup_), litem(litem_), size(size_){};
 
 
 
-
-dimentions longueurfichier (char * cheminfichier) //détermine la longueur d'un fichier 
+void init_data (char * pathfile_info, char * pathfile_var, int & nrows, int & nvar, std::vector<std::string> & varnames ,double *& supvalue, int *& sizevalue, int *&litemvalue )
 { 
-  FILE *Fichier = fopen(cheminfichier,"r"); // ouvre le fichier en mode lecture 
-  int longueur = 0;
-  int nb_lignes = 0;
-  char c;
+  std::cout << "entree init \n";
+  long taille = 0; int i = 0; int n = 0; int p = 0; int t = 0;
+  char c ; int sit = 0; std::string st="";
+  char * tabchar_info = NULL;
+  char * tabchar_var = NULL;
+  FILE *Fichier = fopen(pathfile_info,"r"); 
 
   if (Fichier != NULL)
     { 
-      while (fscanf(Fichier,"%c",&c)!= EOF)  // Tant que le pointeur dans le fichier n'est pas sur l'end of file
-       {longueur ++;
-        if (c == '\n') nb_lignes++; }                      
+      while (!feof(Fichier))  
+       {c = getc(Fichier);
+        taille ++;
+        if (c == '\n') nrows++; }                      
 
     }
-    fclose(Fichier);
-    dimentions out (longueur, nb_lignes); 
-    return out;  
+  fclose(Fichier);
+  tabchar_info = (char*)malloc(taille * sizeof(char));
+  Fichier = fopen(pathfile_info,"r");
+  if ( Fichier != NULL && tabchar_info  != NULL)
+    { 
+     while (i < taille)
+      { c = getc(Fichier);
+        tabchar_info[i++]=c;}
+      }
+  else perror ("\n\n problem in file ");
+  fclose(Fichier);
 
-}
+  std::vector<std::string> info_for_tree (nrows);
+      
+  st.reserve(1000);
 
-void remplirfichier (char *cheminfichier, char* chaine, dimentions& dimtableau) // prends une chaine de character ayant la bonne chaine 
-{ 
-  FILE * Fichier = fopen(cheminfichier,"r");
-  if ( Fichier != NULL && chaine  != NULL)
-    { int i = 0;
-      char c;
-     while (fscanf(Fichier , "%c",&c)!= EOF) // tant que exctraction de la donnée character  dans la valeure c différente de end of file
-      {chaine[i]=c;
-        i++;}}
-        else perror ("\n\n memorisierfichier ");
-
-      fclose(Fichier);     
-}
-
-void transformintotransac (char* chainecara, std::string * pstring ,dimentions& dimtab)
-{ 
-  int nbligne = dimtab.nb_lignes;
-  int sit = 0;
-  std::string aremp ="";
-  aremp.reserve(50);
-  for (int i =0; i < nbligne; i++, sit++ )
-   { while (chainecara[sit] != '\n')
-     {aremp += chainecara[sit++];}
-      pstring[i]= aremp;
-      aremp = "";}
-}
-
-void getabfull (std::vector<std::string>& tabstr, double * RelativeSupvalue, int *  sizevalue, int *  litemvalue)
-{   std::string qs;
-    qs.reserve (50);
-    int n =0;
-    int p = 0;
-    for (std::string &st : tabstr)
+  for (t =0; t < nrows; t++, sit++ )
+    { while (tabchar_info[sit] != '\n') {st += tabchar_info[sit++];}
+          info_for_tree[t]= st;
+          st = "";
+    }
+    free(tabchar_info);
+    supvalue = (double*)malloc(nrows*sizeof(double));
+    sizevalue = (int*)malloc(nrows*sizeof(int));
+    litemvalue = (int*)malloc(nrows*sizeof(int));
+    taille = 0; i = 0; sit = 0;
+    st.erase(st.begin(),st.end());
+    for (std::string &stk : info_for_tree)
         {
-          for (char c:st)
+          for (char ch:stk)
             {
-                if (c != '\t') {qs+=c;}
+                if (ch != '\t') {st+=ch;}
                   else { 
-                            if ( n==0 ) {RelativeSupvalue[p] = std::stod(qs); n=1; qs.erase(qs.begin(),qs.end());}
-                            else {sizevalue[p] = std::stoi(qs); n = 0; qs.erase(qs.begin(),qs.end());}
+                            if ( n==0 ) {supvalue[p] = std::stod(st); n=1; st.erase(st.begin(),st.end());}
+                            else {sizevalue[p] = std::stoi(st); n = 0; st.erase(st.begin(),st.end());}
 
                         }   
             }
-         litemvalue[p] = std::stoi(qs);
-         qs.erase(qs.begin(),qs.end());
+         litemvalue[p] = std::stoi(st);
+         st.erase(st.begin(),st.end());
          p++;    
         }
+  std::cout << "partie 2  \n";
+  st.erase(st.begin(),st.end());
+  FILE *Fichier_two = fopen(pathfile_var,"r"); 
+
+  if (Fichier_two != NULL)
+    { 
+      while (!feof(Fichier_two))  
+       {c = getc(Fichier_two);
+        taille ++;
+        if (c == '\n') nvar++; }                      
+
+    }
+  fclose(Fichier_two);
+  varnames.reserve(nvar);
+  tabchar_var = (char*)malloc(taille * sizeof(char));
+  Fichier_two = fopen(pathfile_var,"r");
+  if ( Fichier_two != NULL && tabchar_var  != NULL)
+    { 
+     while (i < taille)
+      { c = getc(Fichier_two);
+        tabchar_var[i++]=c;}
+      }
+  else perror ("\n\n problem in file ");
+  fclose(Fichier_two); 
+
+    for (t =0; t < nvar; t++, sit++ )
+    { while (tabchar_var[sit] != '\n') {st += tabchar_var[sit++];}
+          varnames.push_back(st);
+          st = "";
+    }       
+
+free (tabchar_var);
+
 }
+
+
+
 
 
 double conftwo (double & freq_ante, double & freq_complem, double & freq_set )
@@ -141,7 +168,7 @@ else {clist = curlist; ctree = curtree; cfath = curfather;}
 
 
 
-void gen_listetree (std::vector<double> & supvalue, std::vector<int> & litemvalue, std::vector<int> & sizevalue, int nbfreq, pnodesr** tabpnodes)
+void gen_listetree (double *  supvalue, int *  litemvalue, int *  sizevalue, int nbfreq, pnodesr** tabpnodes)
   {
     for (int i =0; i < nbfreq; i++)
       {
@@ -287,6 +314,11 @@ void Genrulesroot (pnodesr & roots, int size, std::string ** tabname, std::strin
 
 int main (int argc , char ** argv)
 {
+  double * supvalue = NULL;
+  int * sizevalue = NULL;
+  int * litemvalue = NULL;
+  std::vector<std::string> varnames;
+  int nvar =0; int nrows = 0;
   char  * pathr = (char*)argv[1]; //  path to file of info freqset
   char  * pathv = (char*)argv[2];
   std::string confparam ((char*)argv[3]);
@@ -318,28 +350,8 @@ int main (int argc , char ** argv)
       coeffstr [a] = std::string ((char*)argv[b]);
     }
 
-  dimentions dimtab = longueurfichier(pathr);
-  int nb_elem = dimtab.nb_elem;
-  char *tabchar = new char [nb_elem];
-  remplirfichier (pathr,tabchar,dimtab);
-  int nbfreq = dimtab.nb_lignes;
-  std::vector<std::string> aremp (nbfreq);
-  transformintotransac (tabchar,&aremp[0],dimtab);
 
-  std::vector<double> supvalue (nbfreq); 
-  std::vector<int> sizevalue  (nbfreq);
-  std::vector<int> litemvalue (nbfreq);
-  getabfull (aremp,&supvalue[0],&sizevalue[0], &litemvalue[0]);
-
-  dimentions dimtabv = longueurfichier(pathv);
-  nb_elem = dimtabv.nb_elem;
-  char *tabcharv = new char [nb_elem];
-  remplirfichier (pathv,tabcharv,dimtabv);
-  int nbvar = dimtab.nb_lignes;
-  std::vector<std::string> nameliste (nbvar);
-  transformintotransac (tabcharv,&nameliste[0],dimtabv);
-
-  delete [] tabchar;
+ init_data(pathr, pathv, nrows,nvar, varnames,supvalue,sizevalue,litemvalue);
 
   std::unordered_map<std::string,int> mapparam;
   mapparam["conftwo"] = 0;
@@ -353,11 +365,11 @@ int main (int argc , char ** argv)
 
   
   pnodesr * rootrules = new pnodesr(0,0,0);
-  pnodesr* tabpnodes [nbfreq];
-  gen_listetree(supvalue,litemvalue,sizevalue,nbfreq,tabpnodes);
+  pnodesr* tabpnodes [nrows];
+  gen_listetree(supvalue,litemvalue,sizevalue,nrows,tabpnodes);
   int sit =0;
-  int k = nbfreq /10000;
-  int restek = nbfreq -10000*k;
+  int k = nrows /10000;
+  int restek = nrows -10000*k;
   int ct = 1;
 
   int nbg = 0;
@@ -369,21 +381,21 @@ int main (int argc , char ** argv)
     { nbg = 10000*ct; 
       gen_tree (clist,ctree,cfath,tabpnodes,sit,nbg); 
     } 
-  gen_tree(clist,ctree,cfath,tabpnodes,sit,nbfreq);
+  gen_tree(clist,ctree,cfath,tabpnodes,sit,nrows);
 
   std::cout << "done" << std::endl;
 
   std::unordered_map<std::string,double> mappysup;
-  mappysup.reserve(2*nbfreq);
+  mappysup.reserve(2*nrows);
  
   std::list<rules> tabofrules;
 
   std::cout << "Testing " << "confidence" << " ... ";
-  std::string ** tabname = new std::string * [nameliste.size()];
+  std::string ** tabname = new std::string * [varnames.size()];
   std::string st;
   st.erase(st.begin(),st.end());
   st.reserve (50);
-  Genrulesroot (*rootrules->son,1,tabname,st,&nameliste[0],mappysup, minConf ,tabofrules);
+  Genrulesroot (*rootrules->son,1,tabname,st,&varnames[0],mappysup, minConf ,tabofrules);
   std::cout << "done" << std::endl;
   std::cout << " There is " << tabofrules.size() << " confident rules " << std::endl;
   int nbrules = tabofrules.size();
@@ -443,6 +455,7 @@ int main (int argc , char ** argv)
       }
  }
   std::cout << "done" << std::endl;
+  free(supvalue); free(sizevalue); free (litemvalue);
   std::cout << "Write in file ..." << std::endl;
 
   if (argc > 5 + nbcoeff)
@@ -458,7 +471,7 @@ int main (int argc , char ** argv)
       {
         outfluxrules << "\t" << coeffstr[l];
       } 
-    outfluxrules  << std::endl;
+    outfluxrules << "\n"; 
     for(i = 0; i < nbrules ;i++)
       {
         outfluxrules << antetab[i] << "\t" << comptab[i] << "\t" << valuetab[i];
@@ -466,7 +479,7 @@ int main (int argc , char ** argv)
           { 
             outfluxrules << "\t" << tabcoeff[l][i] ;
           }
-        outfluxrules << std::endl;  
+        outfluxrules << "\n";  
       }
     outfluxrules.close();
   }
