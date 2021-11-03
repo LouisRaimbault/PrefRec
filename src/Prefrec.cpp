@@ -152,15 +152,16 @@ int init_prefixtree (uint64_t ** Bitdata, uint64_t **& Bdata,std::vector<std::st
 
 
 int nbfreq = 0;
-int minsup =0;
+static int minsup =0;
 int curlitem = 0;
+static int nbc = 0;
 static uint64_t Ultab [65];
 
 
-void creabitfield ( int *ind,int* mod,uint64_t * ptul, uint64_t * nlgtabl,  int nbc)
+void creabitfield ( int *ind,int* mod,uint64_t * ptul, uint64_t * nlgtabl,  int nbca)
 {   auto * yb = &Ultab[0]; uint64_t u; int t = 0; auto * ybi = &Ultab[0];
     auto * yd = &Ultab[64];
-    for (auto a =0; a < nbc ; a++)
+    for (auto a =0; a < nbca ; a++)
     {  
       for (yb = ybi; yb != yd; yb++)
       { 
@@ -221,35 +222,36 @@ void init_Rnodes (rnodes* outrnodes, int* vecsom,  int* tindices ,int * mod,uint
       }
 }
 
-void depthwalk (pnodes * Tree, uint64_t * cand, rnodes* tabrnodes , int nbcases)
+void depthwalk (pnodes * Tree, uint64_t * cand, rnodes* tabrnodes)
 { int elem = Tree->litem;
   bool d = !Tree->brother;
-  if (!tabrnodes[elem].indic) {if (!d) {depthwalk(Tree->brother, cand, tabrnodes,nbcases);} return;}
+  if (!tabrnodes[elem].indic) {if (!d) {depthwalk(Tree->brother, cand, tabrnodes);} return;}
   int supcand = 0;
   auto * tib = tabrnodes[elem].tab;
-  auto * ed = &cand[nbcases];
-  for (auto * tob = cand; tob != ed; tob++,tib++ )
+  auto * ed = &cand[nbc];
+  for (auto * tob = cand; tob != ed; ++tob,++tib )
     {supcand += __builtin_popcountl(*tob&*tib);}
   if (supcand<minsup) 
   {tabrnodes[elem].indic=0;
-  if (!d) depthwalk(Tree->brother, cand, tabrnodes,nbcases);
+  if (!d) depthwalk(Tree->brother, cand, tabrnodes);
   tabrnodes[elem].indic=1;
   return;
   }          
   nbfreq++;
   if (!Tree->son)
     {Tree->son = new pnodes(supcand, curlitem,NULL);
-     if (!d) {depthwalk(Tree->brother, cand, tabrnodes,nbcases);}
+     if (!d) {depthwalk(Tree->brother, cand, tabrnodes);}
      return;
     }   
   pnodes * trpnodes = Tree->son;
-  uint64_t ptab [nbcases] ;
+  uint64_t  * ptab = (uint64_t*) malloc (nbc*sizeof(uint64_t)) ;
   auto * pptab = &ptab[0];
   tib = tabrnodes[elem].tab;
-  for (auto * tob = cand; tob != ed; tob++,tib++,pptab++ ){*pptab = *tob&*tib;}        
-  depthwalk(trpnodes,ptab,tabrnodes,nbcases);
+  for (auto * tob = cand; tob != ed; ++tob,++tib,++pptab ){*pptab = *tob&*tib;}        
+  depthwalk(trpnodes,ptab,tabrnodes);
+  free(ptab);
   Tree->son = new pnodes (supcand,curlitem,trpnodes);
-  if (!d) depthwalk(Tree->brother, cand, tabrnodes,nbcases);
+  if (!d) depthwalk(Tree->brother, cand, tabrnodes);
   return;       
 }
 
@@ -263,7 +265,7 @@ void rootwalk (pnodes & root ,rnodes * rootnodes,  int nbcases, int nbleft )
             if ( trpn == NULL) temp->son = new pnodes (rootnodes[i].sup,curlitem,NULL);
             else 
             {  
-              depthwalk(trpn,rootnodes[i].tab,rootnodes,nbcases);
+              depthwalk(trpn,rootnodes[i].tab,rootnodes);
               temp->son = new pnodes (rootnodes[i].sup,curlitem,trpn);
             }
             
@@ -281,8 +283,9 @@ pnodes Bitprefrec (uint64_t** Bitdata, std::vector<std::string> &varnames, int m
  auto e = 0;
  auto n = 0;
  uint64_t ** Bdata = NULL ;
- uint64_t * pul = NULL;
- uint64_t * pulb = NULL;
+ auto * pul = &Bitdata[0][0];
+ auto * pulb = &Bitdata[0][0];
+ auto * pulc = &Bitdata[0][0];
  int keep = init_prefixtree(Bitdata, Bdata ,varnames, minsup,nvar,maxul,ordre);
  std::cout <<"Done The Supportvalue is " << minsup << ". Start PrefRec with  " << keep << " frequents variables ..." <<  std::endl;
  if(keep ==0)
@@ -303,9 +306,10 @@ pnodes Bitprefrec (uint64_t** Bitdata, std::vector<std::string> &varnames, int m
    curlitem = j;
    nbfreq++;
    pul = Bdata[j];
+   pulc = &Bdata[j][maxul];
    for (a = 0; a < maxul;a++)
    {sum+= __builtin_popcountl(pul[a]);}
-   int nbc = sum/64;
+   nbc = sum/64;
    int reste = sum-64*nbc;
    if (reste) nbc ++;
    e = 0;
@@ -323,8 +327,8 @@ pnodes Bitprefrec (uint64_t** Bitdata, std::vector<std::string> &varnames, int m
     for (a = 0; a < j; a++)
       {
         s = 0; pulb = Bdata[a];
-        for (n = 0; n < maxul; n++)
-          { s += __builtin_popcountl(pul[n]&pulb[n]);}
+        for (pul = Bdata[j]; pul != pulc; ++pul,++pulb)
+          { s += __builtin_popcountl(*pul & *pulb);}
         rootsum[a] = s;
       }
    
