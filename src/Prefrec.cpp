@@ -63,7 +63,7 @@ void Init_data (char * pathfile, int & nrows, int & maxul ,int & nvar, uint64_t 
   std::cout << "Done. Preparing BitData store in uint64_t ... ";
   nvar = maptr.size();
   maxul = nrows/64;
-  int rst = nrows-64/maxul;
+  int rst = nrows-64*maxul;
   if (rst) maxul++;
   Bitdata = new uint64_t * [nvar];
   for (t = 0; t < nvar;t++) {Bitdata[t] = new uint64_t [maxul]{0};}
