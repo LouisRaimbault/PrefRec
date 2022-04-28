@@ -16,22 +16,33 @@ If you would like to better understand their use and methods of operation, pleas
 * Get an output Tsv file for information about frequent itemSet
 * Get 2 files necessary to launch Prefrules 
 
-**Prefrules:**
+**PrefRules:**
 * (recursiv) Mining confident rules with a minConf value
-* 4 differents possibles kind of supplementary coefficient
-* Get an output txt files for informations about confident rules and the coefficients you choose 
+* 7 differents possibles kind of supplementary coefficient
+* Possibility of adding additional constraints to the extraction of the rules, based on the proposed coefficients
+* Possibility to select target items or itemset
 
-**Prefrules supplementary coefficient :** 
+
+**PrefRules coefficient :** 
+* Conf2 (usually know as minconf)
+* Conf1
+* Power2
+* Power1
 * Covariance
 * Correlation
 * Kappa
 * Maxwell-Pilliner 
 
+**Prefrules global coefficient :**
+* Mean = (1/4) (conf1+conf2+power1+power2)
+* Strong = 1- sup(antecedant)-sup(consequent) + 2* sup(set)
+
 ## Creating binaries and getting started
 ```
-cd src && make
+cd Prefrec_src && make
+cd Prefrules_src && make
 ./Prefrec <transaction dataset> < d=item_delimitator> <s=minimal_relative_support "s"> <output_file_set_infos> <output file for coefficient>
-./Prefrules <file set coefficient> <file set coefficient rules> <c=minconf> <n=nbcoeff> <coeff 1 > ... <coeff n>  <output file coefficient info>
+./Prefrules <file set coefficient> <file set coefficient rules> <number of n condition coefficient> <coeff1=value> ... <target item> <path for output> <coeffn=value> ... <number of m extract coefficient> <coeff1> ... <coeffm> <bool ok size> <bool ok sup> <bool ok global_indic>
 
 ```
 
@@ -54,7 +65,7 @@ The following tab is an example with sep=, item a b c and d, and five transactio
 
 The folder sample contain a simple small dataset test. You can use it for the example below to see how the software works.
 
-The section https://github.com/LouisRaimbault/PrefRec/tree/main/databases_test presents some larger databases used for efficiency simulations. If you want more information, you can read the associated read me.
+The section https://github.com/LouisRaimbault/PrefRules_Strat/tree/main/databases_test presents some larger databases used for efficiency simulations. If you want more information, you can read the associated read me.
 
 
 ### Example
@@ -63,10 +74,11 @@ The section https://github.com/LouisRaimbault/PrefRec/tree/main/databases_test p
 ./Prefrec ../sample/input/Fruits.txt d=, s=0.20 ../sample/output_Prefrec/infoset \\ Do the extraction and write frequent set informations in infoset   
 ./Prefrec ../sample/input/Fruits.txt d=, s=0.20 ../sample/output_Prefrec/infoset ../sample/output_Prefrec/genrules \\ Do the extraction, write frequent set informations in info set,  and create 2 files , genrules.txt and genrules_item.txt, necessary to use Prefrules
 
-./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt c=0.75 n=0 \\ Calculate confident rules with a minconf of 0.75
-./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt c=0.75 n=0 ../sample/output_Prefrules/inforules \\ Calculate confident rules with a minconf of 0.75 and write confident rules info in inforules
-./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt c=0.75 n=2 cov corr ../sample/output_Prefrules/inforules \\  Calculate confident rules with a minconf of 0.75, compute their coeffiient cov and corr and write  informations in inforules.txt
-```
+./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt 2 Conf2=0.5 Conf1=0.2 all_tgts \\ Calculate all confident rules with a minconf of 0.5 , then valid rules with conf1>=0.2
+./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt 2 Conf2=0.5 Conf1=0.2 apple, \\ Calculate confident rules with a minconf of 0.5 and having an antecedant or consequebt containing apple, then valid rules with conf1>=0.2
+./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt 1 Conf2=0.5 all_tgts ../sample/output_Prefrules/inforules 2 Conf2 Power2 1 1 0 \\ Calculate all confident rules with a minconf of 0.5 and write confident rules with their Conf2,Power2 and their size and supports values in inforules
+./Prefrules ../sample/output_Prefrec/genrules.txt ../sample/output_Prefrec/genrules_variables.txt 2 Conf2=0.5 Conf1=0.2 1 all_indicators apple, 1 1 1 ../sample/output_Prefrules/inforules  \\  Calculate confident rules with set containing the item "apple" with a minconf of 0.75 and write all the rules and the 8 indicator values with their size, their support and the 2 global indicators
+``` 
 
 
 ## Parameters for Prefrec :
@@ -86,10 +98,16 @@ The section https://github.com/LouisRaimbault/PrefRec/tree/main/databases_test p
 |--------------------|--------|--------|
 |    file set coefficient   |    yes    | The genrules_file.txt created with Prefrec   |
 |    file set coefficient item |    yes    |  The genrules_file_item.txt created with Prefrec  | 
-|    minconf  "c="  |    yes    | the minconf you want to use for prunning, if you dont want to, put -1  |
-|    nbcoeff "n=" |    yes    | the number of supplementary coefficient you want to compute |   
-|    type of coefficient    |    no if n=0    | the supplementary coefficient you want to compute | 
-|    output file coefficient infos    |    no    |  If you want the output file rules informations, put the directory file (with no exention type)    |  
+|    number of coefficient condition |    yes    |  The number of coefficient  |
+|    coefficient condition |    yes    |  all the coefficient with their value , ex Conf1=0.1  |
+|    (1)output file coefficient infos    |    no    |  If you want the output file rules informations, put the directory file (with no exention type)    |
+|    number of extracted coefficient |    yes if (1)   |  The number of extracted coefficient, if you wan't all type 1  | 
+|    extracted coefficient |    yes if (1)    |  all the extracted coefficient, if you wan't all type "all_indicators"  |
+|    target +','  |    yes if (1)   | the target item. if you wan't to set a particular target, otherwise type "all_tgts"  |
+|    ok sup |    yes if (1)   |  if you wan't the support values for antecedant consequent and set  |
+|    ok size |    yes if (1)   |  if you wan't the size values for antecedant consequent and set  |
+|    ok global indic |    yes if (1)   |  if you wan't the 2 globals indic, Mean and Strong  |
+  
 
 
 
