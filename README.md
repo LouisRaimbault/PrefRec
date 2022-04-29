@@ -99,7 +99,7 @@ The section https://github.com/LouisRaimbault/PrefRules_Strat/tree/main/database
 
 
 
-## Parameters for Prefrec :
+## Parameters for Prefrec_Mooving :
 |param|required|note|
 |--------------------|--------|--------|
 |    transaction dataset    |    yes    | The Dataset transaction  |  
