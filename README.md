@@ -23,6 +23,12 @@ If you would like to better understand their use and methods of operation, pleas
 * Possibility to select target items or itemset
 
 
+**Prefrec_Mooving:**
+* A possible implementation for mooving-FIM type application
+* Get an output Tsv file for information about frequent itemSet
+* Get 2 files necessary to launch Prefrules 
+
+
 **PrefRules coefficient :** 
 * Conf2 (usually know as minconf)
 * Conf1
@@ -90,6 +96,23 @@ The section https://github.com/LouisRaimbault/PrefRules_Strat/tree/main/database
 |    ordering frequent 1-itemset "o="   |    no    | n for unordered, i for ascendant order, d for decreasing order      | 
 |    output file set infos    |    no    |  For file frequent set informations, put the directory file (with no extention type )    | 
 |    output file for coefficient    |    no    |  If you want to use Prefrules, put the directory file (with no exention type)| 
+
+
+
+## Parameters for Prefrec :
+|param|required|note|
+|--------------------|--------|--------|
+|    transaction dataset    |    yes    | The Dataset transaction  |  
+|    item delimitator "d="   |    yes    | the item separator you use with your dataset transaction | 
+|    minimal relative support "s="   |    yes    | the minimal relativ support you wish     | 
+|    Constant number of variables in model   |    yes    | type only the number      | 
+|    Number of mooving recursion   |    yes    | type only the number      | 
+|    ordering frequent 1-itemset "o="   |    no    | n for unordered, i for ascendant order, d for decreasing order      | 
+|    output file set infos    |    no    |  For file frequent set informations, put the directory file (with no extention type )    | 
+|    output file for coefficient    |    no    |  If you want to use Prefrules, put the directory file (with no exention type)| 
+
+
+
 
 
 
