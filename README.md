@@ -39,8 +39,8 @@ If you would like to better understand their use and methods of operation, pleas
 
 ## Creating binaries and getting started
 ```
-cd Prefrec_src && make
-cd Prefrules_src && make
+cd src/Prefrec_src && make
+cd src/Prefrules_src && make
 ./Prefrec <transaction dataset> < d=item_delimitator> <s=minimal_relative_support "s"> <output_file_set_infos> <output file for coefficient>
 ./Prefrules <file set coefficient> <file set coefficient rules> <number of n condition coefficient> <coeff1=value> ... <target item> <path for output> <coeffn=value> ... <number of m extract coefficient> <coeff1> ... <coeffm> <bool ok size> <bool ok sup> <bool ok global_indic>
 
@@ -130,13 +130,7 @@ An association rule is an implication A ⇒ B where A and B are two itemsets. Th
 The confidence of a rule A ⇒ B is defined as conf(A ⇒ B) = supp(A ⇒B)/supp(A) = freq(A∪B)/freq(A).
 Considering a treshold minconf, a rule such that A ⇒ B is confident if conf (A ⇒ B) > minconf.
 
-**Others criterion**
 
-We propose some other criterion:
-- Covariance 
-- Correlation
-- Kappa coefficient 
-- Maxwell-Pilliner coefficient
 
 
 
