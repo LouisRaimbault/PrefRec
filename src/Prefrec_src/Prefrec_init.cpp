@@ -66,7 +66,7 @@ void Init_data (char * pathfile, int & nrows, int & maxul ,int & nvar, uint64_t 
   std::cout << "Done. Preparing BitData store in uint64_t ... \n";
   nvar = 0;
   maxul = nrows/64;
-  int rst = nrows-64/maxul;
+  int rst = nrows-64*maxul;
   if (rst) maxul++;
   std::unordered_map<std::string,int>::iterator it_int;
   std::unordered_map<std::string,int>::iterator it_itend = map_int.end();
